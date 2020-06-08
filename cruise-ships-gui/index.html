@@ -1,0 +1,36 @@
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <link rel="stylesheet" href="../node_modules/normalize.css/normalize.css">
+        <link rel="stylesheet" href="../cruise-ships-gui/CSS/style.css">
+        <link href="https://fonts.googleapis.com/css2?family=Acme&display=swap" rel="stylesheet">
+        <title>Cruise Ships</title>
+    </head>
+    <body>
+        <div id="viewport">
+           <div id="ports"></div> 
+           <div id="ship"></div>
+           <button id="sailbutton">Set Sail!</button>
+        </div>
+     
+        <script src="../src/controller.js"></script>
+        <script src="../src/Port.js"></script>
+        <script src="../src/Itinerary.js"></script>
+        <script src="../src/Ship.js"></script>
+        <script>
+            const itinerary = new Itinerary([
+                new Port('St.Petersburg'),
+                new Port('Hamburg'),
+                new Port('New York'),
+                new Port('Santiago')
+            ])
+            const ship = new Ship(itinerary);
+            const controller = new Controller(ship);
+            controller.renderPorts(itinerary.ports);
+            controller.renderShip();
+        </script>
+    </body>
+    </html>
