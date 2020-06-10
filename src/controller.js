@@ -51,7 +51,7 @@
         if (!nextPortElement) {
             return this.renderMessageBox('The end of the cruise!');
         }
-        this.renderMessageBox(`Now departing ${ship.currentPort.name}`)
+        this.renderMessageBox(`Now departing ${ship.currentPort.name}`);
         ship.setSail();
         
         const shipElement = document.querySelector('#ship');
@@ -59,26 +59,46 @@
             const shipLeft = parseInt(shipElement.style.left, 10);
             if (shipLeft === (nextPortElement.offsetLeft - 32)) {
                 ship.dock();
-                this.renderMessageBox(`Arrived at ${ship.currentPort.name}`);
+                this.setDisplay();
                 clearInterval(sailInterval);
             }
             shipElement.style.left = `${shipLeft + 1}px`; 
         }, 20);
-
-        
+     
     };
 
     Controller.prototype.renderMessageBox = function(message) {
         const messageElement = document.createElement('div');
         messageElement.id = 'message';
         messageElement.innerHTML = message;
-        const viewport = document.querySelector('#viewport');
-        viewport.appendChild(messageElement);
+        const display = document.querySelector('#display');
+        display.appendChild(messageElement);
 
         setTimeout(() => {
-            viewport.removeChild(messageElement)
-        },2000); 
+            display.removeChild(messageElement)
+        },1200); 
     };
+
+    Controller.prototype.setDisplay = function() {
+        const ship = this.ship;
+        const currentPortP = document.getElementById('currentPort');
+        const nextPortP = document.getElementById('nextPort');
+        const nextPortIndex = ship.itinerary.ports.indexOf(ship.currentPort) + 1;
+        
+        const currentPortMessage = `Current Port: ${ship.currentPort.name}`;
+
+
+        if (nextPortIndex < ship.itinerary.ports.length) {
+            const nextPortMessage = `Next Port: ${ship.itinerary.ports[nextPortIndex].name}`;
+            nextPortP.innerText = nextPortMessage;
+        } else{
+
+            nextPortP.innerText = 'The end of the cruise!';
+        }
+        currentPortP.innerText = currentPortMessage;
+    }
+
+
     
     if (typeof module !== 'undefined' && module.exports) {
         module.exports = Controller;

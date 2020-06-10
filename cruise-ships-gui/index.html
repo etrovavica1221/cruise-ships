@@ -10,12 +10,26 @@
         <title>Cruise Ships</title>
     </head>
     <body>
+        
+        <div id="display">
+            <p id="currentPort"></p>
+            <p id="nextPort"></p>
+        </div>
         <div id="viewport">
            <div id="ports"></div> 
            <div id="ship"></div>
            <button id="sailbutton">Set Sail!</button>
         </div>
      
+        <script>
+            sailbutton = document.getElementById('sailbutton'); 
+            sailbutton.addEventListener('click', myPlay); 
+
+            function myPlay(){
+            let audio = new Audio("wave.wav");
+            audio.play();
+            };  
+        </script>
         <script src="../src/controller.js"></script>
         <script src="../src/Port.js"></script>
         <script src="../src/Itinerary.js"></script>
