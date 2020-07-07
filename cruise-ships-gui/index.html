@@ -11,6 +11,14 @@
     </head>
     <body>
         
+        <div id = "div_form_add">
+            <form  action = "" id = "add_form" onsubmit = "event.preventDefault();">
+                <label for="add_port">Add Port</label><br>
+                <input id = "input-port" type="text" name="add_port" placeholder="Port Name" required><br>
+            </form>
+            <button id = "add_button" form="add_form">Submit</button>
+        </div>
+
         <div id="display">
             <p id="currentPort"></p>
             <p id="nextPort"></p>
@@ -20,31 +28,37 @@
            <div id="ship"></div>
            <button id="sailbutton">Set Sail!</button>
         </div>
-     
+
+        
+        <script src="../src/controller.js"></script>
+        <script src="../src/Port.js"></script>
+        <script src="../src/Itinerary.js"></script>
+        <script src="../src/Ship.js"></script>
+        
         <script>
             sailbutton = document.getElementById('sailbutton'); 
             sailbutton.addEventListener('click', myPlay); 
 
             function myPlay(){
-            let audio = new Audio("wave.wav");
-            audio.play();
+                const nextPortIndex = ship.itinerary.ports.indexOf(ship.currentPort) + 1;
+                if (nextPortIndex < ship.itinerary.ports.length) {
+                    let audio = new Audio("wave.wav");
+                    audio.play();
+                }
             };  
         </script>
-        <script src="../src/controller.js"></script>
-        <script src="../src/Port.js"></script>
-        <script src="../src/Itinerary.js"></script>
-        <script src="../src/Ship.js"></script>
+
         <script>
-            const itinerary = new Itinerary([
-                new Port('St.Petersburg'),
-                new Port('Hamburg'),
-                new Port('New York'),
-                new Port('Santiago')
-            ])
+             const itinerary = new Itinerary([
+            //     // new Port('St.Petersburg'),
+            //     // new Port('Hamburg'),
+            //     // new Port('New York'),
+            //     // new Port('Santiago')
+             ]);
             const ship = new Ship(itinerary);
             const controller = new Controller(ship);
             controller.renderPorts(itinerary.ports);
-            controller.renderShip();
+            //controller.renderShip();
         </script>
     </body>
     </html>

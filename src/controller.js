@@ -6,9 +6,18 @@
         document.querySelector('#sailbutton').addEventListener('click', () => {
             this.setSail();
         });
+
+        document.querySelector("#add_button").addEventListener('click', (e) => {
+            e.preventDefault();
+            this.addPort();
+            this.renderPorts(ship.itinerary.ports);
+            this.renderShip();
+            this.renderMessageBox("Added to itinerary");
+            document.getElementById("input-port").value = "";
+        });
     }
         
-        Controller.prototype.initialiseSea = function initialiseSea() {
+        Controller.prototype.initialiseSea = function() {
             const backgrounds = [
                 '../cruise-ships-gui/images/images/water0.png',
                 '../cruise-ships-gui/images/images/water1.png'
@@ -24,13 +33,17 @@
         const portsElement = document.querySelector('#ports');
         portsElement.style.width = '0px';
         ports.forEach((port, index) => {
-            const newPortElement = document.createElement('div');
-            newPortElement.className = 'port';
-            newPortElement.dataset.portName = port.name;
-            newPortElement.dataset.portIndex = index;
-            portsElement.appendChild(newPortElement);
-            const portsElementWidth = parseInt(portsElement.style.width, 10);
-            portsElement.style.width = `${portsElementWidth + 256}px`;
+            if (!document.querySelector(`[data-port-name=${port.portName}]`)) {
+                const newPortElement = document.createElement('div');
+            
+                newPortElement.className = 'port';
+                newPortElement.dataset.portName = port.portName;
+                newPortElement.dataset.portIndex = index;
+                portsElement.appendChild(newPortElement);
+                //const portsElementWidth = parseInt(portsElement.style.width, 10);
+                const portsElementWidth = 300;
+                portsElement.style.width = `${portsElementWidth + 256}px`;
+            }
         })
     };
     
@@ -51,7 +64,7 @@
         if (!nextPortElement) {
             return this.renderMessageBox('The end of the cruise!');
         }
-        this.renderMessageBox(`Now departing ${ship.currentPort.name}`);
+        this.renderMessageBox(`Now departing ${ship.currentPort.portName}`);
         ship.setSail();
         
         const shipElement = document.querySelector('#ship');
@@ -80,26 +93,39 @@
     };
 
     Controller.prototype.setDisplay = function() {
-        const ship = this.ship;
+        this.ship = ship;
         const currentPortP = document.getElementById('currentPort');
         const nextPortP = document.getElementById('nextPort');
         const nextPortIndex = ship.itinerary.ports.indexOf(ship.currentPort) + 1;
         
-        const currentPortMessage = `Current Port: ${ship.currentPort.name}`;
+        const currentPortMessage = `Current Port: ${ship.currentPort.portName}`;
 
 
         if (nextPortIndex < ship.itinerary.ports.length) {
-            const nextPortMessage = `Next Port: ${ship.itinerary.ports[nextPortIndex].name}`;
+            const nextPortMessage = `Next Port: ${ship.itinerary.ports[nextPortIndex].portName}`;
             nextPortP.innerText = nextPortMessage;
-        } else{
-
-            nextPortP.innerText = 'The end of the cruise!';
-        }
+        } else {
+                nextPortP.innerText = 'The end of the cruise!';  
+            }
         currentPortP.innerText = currentPortMessage;
-    }
+    };
 
+    Controller.prototype.addPort = function() {
+        const ship = this.ship;
+        const newPort = document.getElementById('input-port').value.replace(/\s/g, "");
+        const portObj = new Port(newPort)
 
-    
+        if (!newPort) {
+            return this.renderMessageBox('At least two ports are required!');
+        } else{
+            ship.itinerary.ports.push(portObj);
+        }
+
+        if (!ship.currentPort) {
+            ship.currentPort = ship.itinerary.ports[0];
+        }
+    };
+      
     if (typeof module !== 'undefined' && module.exports) {
         module.exports = Controller;
     } else {

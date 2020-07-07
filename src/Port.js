@@ -1,17 +1,19 @@
-(function exportPort() {
-    function Port(name) {
-        this.name = name;
+(function exportPort() { 
+    function Port(portName) {
+        this.portName = portName;
         this.ships = [];
     }
 
     Port.prototype = {
         addShip(ship) {
-            this.ships.push(ship);         
+            this.ships.push(ship);
         },
         removeShip(ship) {
-            this.ships.splice(this.ships.indexOf(ship),1);
+            const removedShip =this.ships.indexOf(ship);
+            this.ships.splice(removedShip, 1);
         },
-    }; 
+    };
+
 
     if (typeof module !== 'undefined' && module.exports) {
     module.exports = Port;
